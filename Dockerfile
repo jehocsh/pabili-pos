@@ -1,6 +1,8 @@
 FROM php:8.2-apache
 
-# Install system dependencies and Composer
+WORKDIR /var/www/html
+
+# Install Composer and system dependencies
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 RUN apt-get update && apt-get install -y \
     libicu-dev \
