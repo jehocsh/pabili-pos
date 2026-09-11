@@ -5,11 +5,11 @@ RUN apt-get update && apt-get install -y \
     libicu-dev \
     libzip-dev \
     zip \
-    unauthorized \
+    unzip \
     && docker-php-ext-install intl pdo_mysql mysqli zip
 
 # Enable Apache Rewrite module
-RUn a2enmod rewrite
+RUN a2enmod rewrite
 
 # Update Apache document root to point to CodeIgniter's public folder
 ENV APACHE_DOCUMENT_ROOT /var/www/html/public
