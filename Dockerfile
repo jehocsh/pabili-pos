@@ -2,13 +2,14 @@ FROM php:8.2-apache
 
 WORKDIR /var/www/html
 
-# Install Composer and system dependencies
+# Install Composer, git, and system dependencies
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 RUN apt-get update && apt-get install -y \
     libicu-dev \
     libzip-dev \
     zip \
     unzip \
+    git \
     && docker-php-ext-install intl pdo_mysql mysqli zip
 
 # Enable Apache Rewrite module
@@ -23,7 +24,7 @@ RUN sed -ri -s 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf
 COPY . /var/www/html
 
 # Install PHP dependencies via Composer
-RUN composer install --no-dev --optimize-autoloader
+RUN composer install --no-interaction --optimize-autoloader
 
 # Set proper permissions for writable directory
 RUN chown -R www-data:www-data /var/www/html/writable /var/www/html/public
