@@ -1,6 +1,7 @@
 FROM php:8.2-apache
 
-# Install system dependencies and PHP extensions
+# Install system dependencies and Composer
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 RUN apt-get update && apt-get install -y \
     libicu-dev \
     libzip-dev \
@@ -18,6 +19,9 @@ RUN sed -ri -s 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf
 
 # Copy project files into the container
 COPY . /var/www/html
+
+# Install PHP dependencies via Composer
+RUN composer install --no-dev --optimize-autoloader
 
 # Set proper permissions for writable directory
 RUN chown -R www-data:www-data /var/www/html/writable /var/www/html/public
